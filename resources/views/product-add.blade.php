@@ -4,7 +4,7 @@
 
 <div class="main-login main-center">
     <h5>Add Product</h5>
-    {!!Form::open(['method'=>'POST','route'=>'product.create'])!!}
+    <form id="product_add">
 
         <div class="form-group">
             <label for="name" class="cols-sm-2 control-label">Product Name</label>
@@ -43,7 +43,7 @@
             <button type="submit"  class="btn btn-primary btn-lg btn-block login-button">Add</button>
         </div>
 
-    {!!Form::close() !!}
+    </form>
 </div>
 
 

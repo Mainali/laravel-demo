@@ -1,95 +1,257 @@
-<!doctype html>
-<html lang="{{ app()->getLocale() }}">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<html>
+<head>
+    <title>Product</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
 
-        <title>Laravel</title>
+</head>
+<body>
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+<div class="container">
 
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Raleway', sans-serif;
-                font-weight: 100;
-                height: 100vh;
-                margin: 0;
-            }
+    <div class="row">
 
-            .full-height {
-                height: 100vh;
-            }
+        <div class="col-lg-8 col-lg-offset-2">
 
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
+            <h1>Products</h1>
 
-            .position-ref {
-                position: relative;
-            }
+            <p class="lead">This is a demo app with Laravel PHP and AJAX.</p>
 
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
+            <form id="product_add">
 
-            .content {
-                text-align: center;
-            }
+                <div class="messages"><span style="color:red" id="errormessage"></span></div>
 
-            .title {
-                font-size: 84px;
-            }
+                <div class="controls">
 
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 12px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
-
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
-                        <a href="{{ route('register') }}">Register</a>
-                    @endauth
-                </div>
-            @endif
-
-            <div class="content">
-                <div class="title m-b-md">
-                    Laravel
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="form_name">Product name *</label>
+                                <input id="form_name" type="text" name="name" class="form-control" placeholder="Please enter name of the product *" required="required" data-error="Product name is required.">
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="form_quantity">Quantity *</label>
+                                <input id="form_quantity" type="text" name="quantity" class="form-control" placeholder="Please enter quantity *" required="required" data-error="Quantity is required.">
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="form_price">Price *</label>
+                                <input id="form_price" type="number" name="price" class="form-control" placeholder="Please enter the price *" required="required" data-error="Valid number is required.">
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input type="submit" class="btn btn-success btn-send" >
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p class="text-muted"><strong>*</strong> These fields are required.</p>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
-                </div>
-            </div>
+            </form>
+
         </div>
-    </body>
+
+    </div>
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2">
+            <h1>List of Products</h1>
+            <table class="table table-striped" id="product_table">
+                <thead class="text-primary">
+                <tr>
+                    <th>Product name</th>
+                    <th>Quantity</th>
+                    <th>Price per unit</th>
+                </tr>
+
+                </thead>
+                <tbody id="mydata">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <form id="product_add">
+
+                    <div class="messages"><span style="color:red" id="errormessage"></span></div>
+
+                    <div class="controls">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="form_name">Product name *</label>
+                                    <input id="form_name" type="text" name="name" class="form-control" placeholder="Please enter name of the product *" required="required" data-error="Product name is required.">
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="form_quantity">Quantity *</label>
+                                    <input id="form_quantity" type="text" name="quantity" class="form-control" placeholder="Please enter quantity *" required="required" data-error="Quantity is required.">
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="form_price">Price *</label>
+                                    <input id="form_price" type="number" name="price" class="form-control" placeholder="Please enter the price *" required="required" data-error="Valid number is required.">
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input type="submit" class="btn btn-success btn-send" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="text-muted"><strong>*</strong> These fields are required.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+
+
+
+<script>
+
+    $(document).ready(function() {
+        loadTable();
+    });
+
+    function loadTable() {
+        $.ajax({
+            url: "{{route('products.index')}}",
+            type: 'get',
+            dataType: 'json',
+            success: function (data) {
+                $.each(data, function (k,v) {
+                    $("#mydata").append("<tr><td>"+v.name+"</td><td>"+v.quantity+"</td><td>"+v.price+"</td>"+
+                        "<td><button onclick='deleteData(this)' value='"+v.uid+"' ></td></tr> ");
+                });
+                console.log(data);
+            }
+
+        });
+    }
+
+    $("form#product_add").submit(function () {
+        event.preventDefault();
+        var data = $("#product_add").serializeArray();
+        var jdata = {};
+        for (var i = 0; i < data.length; i++) jdata[data[i].name] = data[i].value;
+        //this.reset();
+        console.log($("form#product_add").serialize());
+        var frm = $("#product_add");
+        console.log('sdf');
+        $.ajax({
+            url: "{{route('products.store')}}",
+            headers: {
+                'X-CSRF-TOKEN': "{{csrf_token()}}"
+            },
+            type: 'post',
+            //data: $("#product_add").serialize(),
+            dataType: 'json',
+            data: frm.serialize(),
+            success: function (data) {
+
+                $("#mydata").append("<tr><td>"+data.name+"</td><td>"+data.quantity+"</td><td>"+data.price+"</td>" +
+                    "<td><button onclick='deleteData(this)' value='"+data.uid+"' ></td></tr> ");
+                console.log(data);
+            },
+            error: function (xhr) {
+                if(xhr.status==422)
+                    $.each(JSON.parse(xhr.responseText), function (k, v) {
+                        $('#errormessage').html(v[0]);
+                    });
+                else if(xhr.status==500)
+                    $('#errormessage').html("error: "+xhr.responseText);
+
+            }
+
+        });
+
+        return false;
+    });
+
+
+    function editData(buttondata) {
+        $("#myModal").modal("show");
+        $.ajax({
+            url: "{{route('products.edit')}}",
+            headers: {
+                'X-CSRF-TOKEN': "{{csrf_token()}}"
+            },
+            type: 'post',
+            dataType: 'json',
+            data: buttondata.value,
+            success: function (data) {
+                $("#mydata").html("");
+                loadTable();
+            },
+            error: function (xhr) {
+                    $('#errormessage').html("error: "+xhr.responseText);
+            }
+        });
+    }
+
+
+    function deleteData() {
+        $.ajax({
+            url: "{{route('products.edit')}}",
+            headers: {
+                'X-CSRF-TOKEN': "{{csrf_token()}}"
+            },
+            type: 'post',
+            dataType: 'json',
+            data: buttondata.value,
+            success: function (data) {
+                console.log("aasd");
+                $(buttondata).closest("tr").remove();
+            },
+            error: function (xhr) {
+                $('#errormessage').html("error: "+xhr.responseText);
+
+            }
+
+        });
+    }
+
+</script>
+
+</body>
 </html>
